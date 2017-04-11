@@ -19,39 +19,17 @@ app.use(express.static('public'));
 // body parser config to accept our datatypes
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// require all schemas and models, passed from the index file and related files
+var db = require('./models')
+
+// access a single book by using db.Books as the root
+
+
 
 
 ////////////////////
 //  DATA
-///////////////////
-
-var books = [
-  {
-    _id: 15,
-    title: "The Four Hour Workweek",
-    author: "Tim Ferriss",
-    image: "https://s3-us-west-2.amazonaws.com/sandboxapi/four_hour_work_week.jpg",
-    release_date: "April 1, 2007"
-  },
-  {
-    _id: 16,
-    title: "Of Mice and Men",
-    author: "John Steinbeck",
-    image: "https://s3-us-west-2.amazonaws.com/sandboxapi/of_mice_and_men.jpg",
-    release_date: "Unknown 1937"
-  },
-  {
-    _id: 17,
-    title: "Romeo and Juliet",
-    author: "William Shakespeare",
-    image: "https://s3-us-west-2.amazonaws.com/sandboxapi/romeo_and_juliet.jpg",
-    release_date: "Unknown 1597"
-  }
-];
-
-
-var newBookUUID = 18;
-
+////////////////////
 
 
 
@@ -60,9 +38,7 @@ var newBookUUID = 18;
 
 ////////////////////
 //  ROUTES
-///////////////////
-
-
+////////////////////
 
 
 // define a root route: localhost:3000/
@@ -71,25 +47,37 @@ app.get('/', function (req, res) {
 });
 
 // get all books
+// ✓ REFACTORED 
+
 app.get('/api/books', function (req, res) {
   // send all books as JSON response
-  console.log('books index');
-  res.json(books);
+  db.Book.find(function(err, books){
+    if (err) { 
+      console.log("index error: " + err); 
+      res.sendStatus(500);
+    }
+    res.json(books);
+  });
 });
 
 // get one book
+// ✓ REFACTORED
+
 app.get('/api/books/:id', function (req, res) {
   // find one book by its id
   console.log('books show', req.params);
-  for(var i=0; i < books.length; i++) {
-    if (books[i]._id === req.params.id) {
-      res.json(books[i]);
-      break; // we found the right book, we can stop searching
-    }
-  }
+
+  db.Book.findOne({_id: req.params.id}, function(err, data){
+
+    res.json(data);
+
+  });
+
 });
 
 // create new book
+// x REFACTORED
+
 app.post('/api/books', function (req, res) {
   // create new book with form data (`req.body`)
   console.log('books create', req.body);
@@ -100,6 +88,8 @@ app.post('/api/books', function (req, res) {
 });
 
 // update book
+// x REFACTORED
+
 app.put('/api/books/:id', function(req,res){
 // get book id from url params (`req.params`)
   console.log('books update', req.params);
@@ -115,6 +105,8 @@ app.put('/api/books/:id', function(req,res){
 });
 
 // delete book
+// x REFACTORED
+
 app.delete('/api/books/:id', function (req, res) {
   // get book id from url params (`req.params`)
   console.log('books delete', req.params);
@@ -132,6 +124,9 @@ app.delete('/api/books/:id', function (req, res) {
 
 
 
+////////////////////
+//  SERVER PORT
+////////////////////
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Book app listening at http://localhost:3000/');
