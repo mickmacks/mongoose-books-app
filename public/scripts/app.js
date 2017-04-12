@@ -49,7 +49,7 @@ function getBookHtml(book) {
   return `<hr>
           <p>
             <span id="bookTitle"><b>${book.title}</b></span>
-            by ${book.author}
+            by ${book.author.name}
             <button type="button" name="button" class="deleteBtn btn btn-danger pull-right" data-id=${book._id}>Delete</button>
             <button type="button" name="button" class="editBtn btn btn-edit pull-right" data-id=${book._id}>Edit</button>
           </p>`;
