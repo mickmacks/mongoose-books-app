@@ -33,14 +33,25 @@ $(document).ready(function(){
     });
   });
 
+  // $booksList.on('click', '.editBtn', function() {
+  //   console.log('clicked edit button to', '/api/books/'+$(this).attr('data-id'));
+  //   $.ajax({
+  //     method: 'PUT',
+  //     url: '/api/books/'+$(this).attr('data-id'),
+  //     success: editBookSuccess,
+  //     error: editBookError
+  //   });
+  // });
+
 });
 
 function getBookHtml(book) {
   return `<hr>
           <p>
-            <b>${book.title}</b>
+            <span id="bookTitle"><b>${book.title}</b></span>
             by ${book.author}
             <button type="button" name="button" class="deleteBtn btn btn-danger pull-right" data-id=${book._id}>Delete</button>
+            <button type="button" name="button" class="editBtn btn btn-edit pull-right" data-id=${book._id}>Edit</button>
           </p>`;
 }
 
@@ -80,6 +91,57 @@ function newBookSuccess(json) {
 function newBookError() {
   console.log('newbook error!');
 }
+
+// function editBookSuccess(json) {
+
+//   // track the input data
+//   var book = json;
+//   console.log(json);
+
+//   // // track the matching ID
+//   var bookId = req.params.id;
+//   console.log('edit book', bookId);
+
+//   // turn the html into a form
+//   var name = $('#bookTitle').text();
+//   console.log(name);
+
+//   // detele the text once the old text is stored
+//   // $(this).html('');
+
+//   //   // change the 
+//   //   $(${book.title})
+//   //       .attr({
+//   //           'type': 'text',
+//   //           'name': 'fname',
+//   //           'id': 'txt_fullname',
+//   //           'size': '30',
+//   //           'value': name
+//   //       })
+//   //       .appendTo(${book.title});
+//   //   $('#txt_fullname').focus();
+
+//   //   // other stuff
+//   //   $(document).on('blur','#txt_fullname', function(){
+//   //   var name = $(this).val();
+//   //   //alert('Make an AJAX call and pass this parameter >> name=' + name);
+//   //   $('#fullname').text(name);
+//   //   });
+
+
+//   // // find the book with the correct ID and remove it from our allBooks array
+//   // for(var index = 0; index < allBooks.length; index++) {
+//   //   if(allBooks[index]._id === bookId) {
+//   //     allBooks.splice(index, 1);
+//   //     break;  // we found our book - no reason to keep searching (this is why we didn't use forEach)
+//   //   }
+//   // }
+//   // render();
+// }
+
+// function editBookError() {
+//   console.log('editbook error!');
+// }
 
 function deleteBookSuccess(json) {
   var book = json;
